@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://qrgenerator.dotrino.com/sitemap.xml

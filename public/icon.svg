@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#00658c"/>
+  <g fill="#ffffff">
+    <!-- finder superior-izquierdo -->
+    <path d="M96 96h120v120H96zm28 28v64h64v-64z"/>
+    <rect x="140" y="140" width="32" height="32"/>
+    <!-- finder superior-derecho -->
+    <path d="M296 96h120v120H296zm28 28v64h64v-64z"/>
+    <rect x="340" y="140" width="32" height="32"/>
+    <!-- finder inferior-izquierdo -->
+    <path d="M96 296h120v120H96zm28 28v64h64v-64z"/>
+    <rect x="140" y="340" width="32" height="32"/>
+    <!-- módulos de datos (cuadrante inferior-derecho) -->
+    <rect x="296" y="296" width="36" height="36"/>
+    <rect x="380" y="296" width="36" height="36"/>
+    <rect x="338" y="338" width="36" height="36"/>
+    <rect x="296" y="380" width="36" height="36"/>
+    <rect x="380" y="380" width="36" height="36"/>
+  </g>
+</svg>
