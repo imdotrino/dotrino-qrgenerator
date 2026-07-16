@@ -5,10 +5,13 @@
  * y permite descargarlo en PNG o SVG o copiarlo. 100% en el navegador: nada se
  * sube a ningún servidor.
  */
+import './migrate-lang'   // ANTES del topbar: copia 'qrgen.lang' → 'dotrino.lang'
 import qrcode from 'qrcode-generator'
 import { registerSW } from 'virtual:pwa-register'
-import '@dotrino/support'
+import '@dotrino/topbar'   // header estándar: marca + volver + idioma + perfil + support
 import '@dotrino/install'
+import { getIdentity } from './services/identity'
+import { getReputation } from './services/reputation'
 import './style.css'
 
 // UTF-8 para que acentos/ñ en texto o contraseñas Wi-Fi se codifiquen bien.
@@ -53,8 +56,20 @@ const I18N = {
     yes: 'Yes', no: 'No',
   },
 }
-const LANG_KEY = 'qrgen.lang'
-let lang = (localStorage.getItem(LANG_KEY) || (navigator.language || 'es').slice(0, 2)) === 'en' ? 'en' : 'es'
+// El idioma lo manda el <dotrino-topbar> (persiste en 'dotrino.lang' y emite
+// 'dotrino-lang'); la app solo lo lee y re-renderiza. Sin toggle propio.
+const topbar = document.getElementById('topbar')
+const installBtn = document.getElementById('install')
+
+function resolveLang () {
+  const l = topbar?.lang
+  if (l === 'es' || l === 'en') return l
+  let saved = null
+  try { saved = localStorage.getItem('dotrino.lang') } catch { /* modo privado */ }
+  if (saved === 'es' || saved === 'en') return saved
+  return (navigator.language || 'es').toLowerCase().startsWith('en') ? 'en' : 'es'
+}
+let lang = resolveLang()
 const t = () => I18N[lang]
 
 /* ---------------- estado ---------------- */
@@ -152,18 +167,6 @@ function fieldsFor (type) {
 function render () {
   const _ = t()
   app.innerHTML = `
-    <header class="topbar">
-      <div class="brand"><img src="/icon.svg" alt="" width="30" height="30" /><span>QR Generator</span></div>
-      <div class="actions">
-        <div class="lang" role="group" aria-label="es / en">
-          <button data-lang="es" class="${lang === 'es' ? 'on' : ''}">ES</button>
-          <button data-lang="en" class="${lang === 'en' ? 'on' : ''}">EN</button>
-        </div>
-        <dotrino-install lang="${lang}"></dotrino-install>
-        <dotrino-support href="https://ko-fi.com/dotrino" repo="imdotrino/dotrino-qrgenerator" discord="https://discord.gg/D648uq7cth" lang="${lang}"></dotrino-support>
-      </div>
-    </header>
-
     <main class="wrap">
       <h1 class="tagline">${_.tagline}</h1>
 
@@ -212,9 +215,6 @@ function render () {
 
 /* ---------------- cableado ---------------- */
 function wire () {
-  app.querySelectorAll('[data-lang]').forEach((b) =>
-    b.addEventListener('click', () => { lang = b.dataset.lang; localStorage.setItem(LANG_KEY, lang); document.documentElement.lang = lang; render() }))
-
   app.querySelectorAll('[data-type]').forEach((b) =>
     b.addEventListener('click', () => { state.type = b.dataset.type; render() }))
 
@@ -308,6 +308,41 @@ const escAttr = (s) => esc(s).replace(/"/g, '&quot;')
 const dlIcon = () => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>'
 const copyIcon = () => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'
 const printIcon = () => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
+
+/* ---------------- topbar (identidad + perfil + idioma) ---------------- */
+// Tema del modal "Mi perfil" (el topbar es su dueño), acorde al claro de la app.
+const PROFILE_THEME = {
+  '--ccp-bg': '#ffffff', '--ccp-bg-2': '#f4f7f9', '--ccp-bg-3': '#eaeff3', '--ccp-bg-4': '#e3e9ed',
+  '--ccp-border': '#cfd8de', '--ccp-text': '#181c1e', '--ccp-muted': '#4a5560',
+  '--ccp-accent': '#00658c', '--ccp-accent-2': '#00506f', '--ccp-accent-text': '#ffffff',
+  '--ccp-gold': '#c98a00', '--ccp-derived': '#b07f00',
+  '--ccp-online': '#00897b', '--ccp-affinity': '#2f8fd6', '--ccp-input-bg': '#f1f4f6', '--ccp-radius': '16px',
+  '--ccp-font': "'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif",
+  '--ccp-font-headline': "'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif",
+  '--ccp-font-mono': 'ui-monospace, SFMono-Regular, Menlo, monospace',
+}
+
+if (topbar) {
+  topbar.profileTheme = PROFILE_THEME
+  // El topbar es la fuente de verdad del idioma: re-renderizamos con lo que emita.
+  topbar.addEventListener('dotrino-lang', (e) => {
+    const l = e.detail?.lang
+    if ((l !== 'es' && l !== 'en') || l === lang) return
+    lang = l
+    installBtn?.setAttribute('lang', l)   // vive en light DOM: hay que propagarlo a mano
+    render()
+  })
+}
+installBtn?.setAttribute('lang', lang)
+
+// Identidad (vault) + reputación para el botón de perfil (§6.1). Si el vault no
+// está disponible, el topbar simplemente muestra el avatar genérico.
+;(async () => {
+  const id = await getIdentity()
+  if (!topbar) return
+  topbar.identity = id
+  if (id) topbar.reputation = await getReputation()
+})()
 
 document.documentElement.lang = lang
 render()

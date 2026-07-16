@@ -51,6 +51,21 @@
     <script data-goatcounter="https://goat.dotrino.com/count" async src="https://goat.dotrino.com/count.js"></script>
   </head>
   <body>
+    <!-- Topbar estándar del ecosistema (CONVENCIONES §5): marca + volver + idioma
+         + perfil + moneda de support. Vive FUERA de #app porque el render de la app
+         reescribe ese contenedor entero y destruiría el componente en cada cambio. -->
+    <dotrino-topbar
+      id="topbar"
+      brand="QR Generator"
+      icon="/icon.svg"
+      brand-href="./"
+      profile
+      support-href="https://ko-fi.com/dotrino"
+      support-repo="imdotrino/dotrino-qrgenerator"
+      support-discord="https://discord.gg/D648uq7cth"
+    >
+      <dotrino-install id="install" slot="end"></dotrino-install>
+    </dotrino-topbar>
     <div id="app"></div>
     <script type="module" src="/src/main.js"></script>
   </body>

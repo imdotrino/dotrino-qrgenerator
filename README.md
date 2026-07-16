@@ -12,6 +12,8 @@ dibuja en un canvas/SVG en tu dispositivo. Nada de lo que escribes se sube a nin
 servidor. App hermana del [QR Reader](https://qrreader.dotrino.com).
 
 Sin anuncios, sin cookies, sin rastreo. Vite (sin framework) + PWA. Bilingüe es/en.
+La barra superior es la estándar del ecosistema (`@dotrino/topbar`): marca, volver,
+idioma, botón de perfil (identidad del vault `id.dotrino.com`) y moneda de soporte.
 
 ## Desarrollo
 
