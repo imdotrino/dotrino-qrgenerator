@@ -13,7 +13,7 @@
     "@dotrino/identity": "0.21.0",
     "@dotrino/install": "0.2.3",
     "@dotrino/reputation": "0.8.0",
-    "@dotrino/topbar": "0.3.0",
+    "@dotrino/topbar": "0.4.0",
     "qrcode-generator": "1.4.4"
   },
   "devDependencies": {
