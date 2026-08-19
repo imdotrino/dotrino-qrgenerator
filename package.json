@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Generador de códigos QR simple y autohospedado del ecosistema Dotrino",
+  "description": "Generador de c\u00f3digos QR simple y autohospedado del ecosistema Dotrino",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@dotrino/identity": "0.33.0",
@@ -18,6 +19,7 @@
   },
   "devDependencies": {
     "vite": "5.4.10",
-    "vite-plugin-pwa": "0.20.5"
+    "vite-plugin-pwa": "0.20.5",
+    "typescript": "5.9.3"
   }
 }
