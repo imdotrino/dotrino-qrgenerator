@@ -12,6 +12,7 @@ import '@dotrino/topbar'   // header estándar: marca + volver + idioma + perfil
 import '@dotrino/install'
 import { getIdentity } from './services/identity'
 import { getReputation } from './services/reputation'
+import '@dotrino/theme/theme.css'
 import './style.css'
 
 // UTF-8 para que acentos/ñ en texto o contraseñas Wi-Fi se codifiquen bien.
@@ -310,20 +311,7 @@ const copyIcon = () => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColo
 const printIcon = () => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
 
 /* ---------------- topbar (identidad + perfil + idioma) ---------------- */
-// Tema del modal "Mi perfil" (el topbar es su dueño), acorde al claro de la app.
-const PROFILE_THEME = {
-  '--ccp-bg': '#ffffff', '--ccp-bg-2': '#f4f7f9', '--ccp-bg-3': '#eaeff3', '--ccp-bg-4': '#e3e9ed',
-  '--ccp-border': '#cfd8de', '--ccp-text': '#181c1e', '--ccp-muted': '#4a5560',
-  '--ccp-accent': '#00658c', '--ccp-accent-2': '#00506f', '--ccp-accent-text': '#ffffff',
-  '--ccp-gold': '#c98a00', '--ccp-derived': '#b07f00',
-  '--ccp-online': '#00897b', '--ccp-affinity': '#2f8fd6', '--ccp-input-bg': '#f1f4f6', '--ccp-radius': '16px',
-  '--ccp-font': "'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif",
-  '--ccp-font-headline': "'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif",
-  '--ccp-font-mono': 'ui-monospace, SFMono-Regular, Menlo, monospace',
-}
-
 if (topbar) {
-  topbar.profileTheme = PROFILE_THEME
   // El topbar es la fuente de verdad del idioma: re-renderizamos con lo que emita.
   topbar.addEventListener('dotrino-lang', (e) => {
     const l = e.detail?.lang

@@ -32,7 +32,7 @@ export default defineConfig({
         scope: './',
         display: 'standalone',
         orientation: 'any',
-        background_color: '#f4f7f9',
+        background_color: '#f7fafc',
         theme_color: '#00658c',
         launch_handler: { client_mode: 'focus-existing' },
         icons: [

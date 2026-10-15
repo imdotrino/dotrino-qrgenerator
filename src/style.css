@@ -1,18 +1,18 @@
 :root {
-  color-scheme: light;
-  --ink: #f4f7f9;
-  --surface: #ffffff;
-  --line: #e3e9ed;
-  --line-2: #cfd8de;
-  --text: #181c1e;
-  --text-dim: #4a5560;
-  --faint: #8a95a0;
-  --accent: #00658c;
-  --accent-press: #00506f;
-  --accent-ink: #ffffff;
-  --radius: 16px;
-  --radius-pill: 999px;
-  --font: 'Quicksand', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Colores del ecosistema (@dotrino/theme, CONVENCIONES §5): aquí solo se nombran. */
+  --ink: var(--dt-bg);
+  --surface: var(--dt-surface);
+  --line: var(--dt-line-soft);
+  --line-2: var(--dt-line);
+  --text: var(--dt-text);
+  --text-dim: var(--dt-text-dim);
+  --faint: var(--dt-text-faint);
+  --accent: var(--dt-accent);
+  --accent-press: var(--dt-accent-press);
+  --accent-ink: var(--dt-accent-ink);
+  --radius: var(--dt-radius);
+  --radius-pill: var(--dt-radius-pill);
+  --font: var(--dt-font);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -28,18 +28,10 @@ body { font-family: var(--font); background: var(--ink); color: var(--text); min
    componente no lo es). */
 dotrino-topbar {
   display: block; position: sticky; top: 0; z-index: 10;
-  --dotrino-topbar-bg: rgba(244,247,249,.85);
-  --dotrino-topbar-border: var(--line);
-  --dotrino-topbar-text: var(--text);
-  --dotrino-topbar-muted: var(--text-dim);
-  --dotrino-topbar-accent: var(--accent);
-  --dotrino-topbar-accent-text: var(--accent-ink);
-  --dotrino-topbar-font: var(--font);
   /* La moneda de support vive en el shadow del topbar: las --ds-* heredan hacia
      adentro y la tematizan clara. */
-  --ds-accent: #00658c; --ds-accent-press: #00506f;
-  --ds-modal-bg: #fff; --ds-modal-text: #181c1e; --ds-modal-muted: #4a5560;
-  --ds-modal-border: #e3e9ed; --ds-modal-hover: rgba(0,0,0,.06);
+
+
 }
 dotrino-topbar::part(brand-icon) { width: 30px; height: 30px; }
 dotrino-topbar::part(brand-name) { font-weight: 700; font-size: 1.15rem; }
@@ -47,7 +39,7 @@ dotrino-topbar::part(lang) { border-color: var(--line-2); background: var(--surf
 dotrino-topbar::part(profile) { width: 36px; height: 36px; background: var(--surface); border-color: var(--line-2); color: var(--text); }
 
 /* <dotrino-install> va en slot="end": vive en light DOM, lo estiliza la app. */
-dotrino-install { --cc-install-accent: #00658c; --cc-install-modal-bg: #ffffff; --cc-install-modal-color: #181c1e; }
+dotrino-install { --cc-install-accent: var(--dt-accent); --cc-install-modal-bg: var(--dt-surface); --cc-install-modal-color: var(--dt-text); }
 
 /* ---- layout ---- */
 .wrap { flex: 1; width: 100%; max-width: 60rem; margin: 0 auto; padding: 1.6rem 1.1rem 2.4rem; display: flex; flex-direction: column; gap: 1.1rem; }
@@ -57,12 +49,12 @@ dotrino-install { --cc-install-accent: #00658c; --cc-install-modal-bg: #ffffff; 
 .layout { display: grid; grid-template-columns: 1fr; gap: 1.1rem; }
 @media (min-width: 740px) { .layout { grid-template-columns: 1fr 1fr; align-items: start; } }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 14px 40px rgba(74,85,96,.07); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--dt-shadow); padding: 1.2rem; display: flex; flex-direction: column; gap: 1rem; }
 
 /* ---- selector de tipo ---- */
 .types { display: flex; flex-wrap: wrap; gap: .4rem; }
 .type { border: 1px solid var(--line-2); background: var(--surface); color: var(--text-dim); font: inherit; font-weight: 700; font-size: .82rem; padding: .4rem .75rem; border-radius: var(--radius-pill); cursor: pointer; }
-.type.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+.type.on { background: var(--accent); color: var(--dt-accent-ink); border-color: var(--accent); }
 
 /* ---- campos ---- */
 .fields { display: flex; flex-direction: column; gap: .8rem; }
@@ -70,10 +62,10 @@ dotrino-install { --cc-install-accent: #00658c; --cc-install-modal-bg: #ffffff; 
 .field { display: flex; flex-direction: column; gap: .3rem; }
 .field > span { font-size: .8rem; font-weight: 700; color: var(--text-dim); }
 .field input, .field textarea, .field select {
-  font: inherit; color: var(--text); background: #fff; border: 1px solid var(--line-2); border-radius: 12px;
+  font: inherit; color: var(--text); background: var(--dt-surface); border: 1px solid var(--line-2); border-radius: 12px;
   padding: .6rem .7rem; width: 100%; resize: vertical;
 }
-.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,101,140,.14); }
+.field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--dt-accent-tint); }
 .field.color input[type="color"] { padding: .2rem; height: 2.6rem; cursor: pointer; }
 .check { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 600; color: var(--text-dim); cursor: pointer; }
 .check input { width: 1.1rem; height: 1.1rem; }
@@ -87,7 +79,7 @@ dotrino-install { --cc-install-accent: #00658c; --cc-install-modal-bg: #ffffff; 
 /* ---- preview ---- */
 .preview-card { align-items: center; }
 .qr-box { width: 100%; min-height: 220px; display: flex; align-items: center; justify-content: center; background: var(--ink); border-radius: 16px; padding: 1rem; }
-.qr-box canvas { width: 256px; height: 256px; max-width: 100%; image-rendering: pixelated; border-radius: 6px; background: #fff; box-shadow: 0 6px 18px rgba(74,85,96,.12); }
+.qr-box canvas { width: 256px; height: 256px; max-width: 100%; image-rendering: pixelated; border-radius: 6px; background: var(--dt-surface); box-shadow: var(--dt-shadow); }
 .qr-box .empty { color: var(--faint); font-size: .9rem; text-align: center; }
 
 /* ---- botones ---- */
@@ -101,5 +93,5 @@ dotrino-install { --cc-install-accent: #00658c; --cc-install-modal-bg: #ffffff; 
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover { background: var(--accent-press); }
 .btn-ghost { background: var(--surface); color: var(--accent); border-color: var(--line-2); }
-.btn-ghost:hover { background: #f0f5f8; }
+.btn-ghost:hover { background: var(--dt-surface-3); }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
