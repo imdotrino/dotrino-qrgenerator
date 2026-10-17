@@ -6,7 +6,7 @@
  * sube a ningún servidor.
  */
 import './migrate-lang'   // ANTES del topbar: copia 'qrgen.lang' → 'dotrino.lang'
-import qrcode from 'qrcode-generator'
+import { qrMatrix } from '@dotrino/qr/svg'
 import { registerSW } from 'virtual:pwa-register'
 import '@dotrino/topbar'   // header estándar: marca + volver + idioma + perfil + support
 import '@dotrino/install'
@@ -14,9 +14,6 @@ import { getIdentity } from './services/identity'
 import { getReputation } from './services/reputation'
 import '@dotrino/theme/theme.css'
 import './style.css'
-
-// UTF-8 para que acentos/ñ en texto o contraseñas Wi-Fi se codifiquen bien.
-try { qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'] } catch { /* fallback ISO-8859-1 */ }
 
 // Recarga cuando el SW nuevo toma control + re-chequeo periódico (CONVENCIONES §3).
 const updateSW = registerSW({ immediate: true })
@@ -117,15 +114,8 @@ function buildPayload () {
 }
 
 /* ---------------- matriz + dibujo ---------------- */
-function buildMatrix (text, ecc) {
-  const qr = qrcode(0, ecc)
-  qr.addData(text)
-  qr.make()
-  const n = qr.getModuleCount()
-  const m = []
-  for (let r = 0; r < n; r++) { const row = []; for (let c = 0; c < n; c++) row.push(qr.isDark(r, c)); m.push(row) }
-  return m
-}
+// La matriz sale del pilar (@dotrino/qr, ya en UTF-8); aquí solo se pinta con los colores elegidos.
+const buildMatrix = (text, ecc) => qrMatrix(text, { ecc })
 const MARGIN = 4
 function drawCanvas (canvas, matrix, scale) {
   const n = matrix.length, size = (n + MARGIN * 2) * scale
